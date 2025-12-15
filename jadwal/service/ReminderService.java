@@ -1,10 +1,15 @@
 package jadwal.service;
 
 import jadwal.model.Reminder;
+
+import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Timer;
+
 
 public class ReminderService {
+
     private List<Reminder> daftarReminder = new ArrayList<>();
 
     public void tambahReminder(Reminder r) {
@@ -18,7 +23,7 @@ public class ReminderService {
             public void run() {
                 cekReminder();
             }
-        }, 0, 60000); // tiap 1 menit
+        }, 0, 60000);
     }
 
     private void cekReminder() {
@@ -28,10 +33,15 @@ public class ReminderService {
             if (!r.isSudahDitampilkan()
                     && !sekarang.isBefore(r.getWaktuReminder())) {
 
-                System.out.println(
-                        "🔔 Reminder: "
-                        + r.getJadwal().getMataKuliah().getNama()
+                SwingUtilities.invokeLater(() ->
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Reminder:\n"
+                                + r.getJadwal().getMataKuliah().getNama()
+                                + "\nHari: " + r.getJadwal().getHari()
+                        )
                 );
+
                 r.setSudahDitampilkan(true);
             }
         }

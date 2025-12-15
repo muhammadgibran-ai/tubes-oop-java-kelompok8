@@ -9,27 +9,31 @@ public class JadwalService {
     private List<Jadwal> daftarJadwal = new ArrayList<>();
 
     public void tambahJadwal(Jadwal jadwal) throws JadwalBentrokException {
-        if (cekKonflik(jadwal, null)) {
-            throw new JadwalBentrokException("Jadwal bentrok dengan jadwal lain");
-        }
-        daftarJadwal.add(jadwal);
+    // ID yang diabaikan adalah null karena ini jadwal baru
+    if (cekKonflik(jadwal, null)) { 
+        throw new JadwalBentrokException("Jadwal bentrok dengan jadwal lain");
+    }
+    daftarJadwal.add(jadwal);
+}
+
+public void editJadwal(String id, Jadwal jadwalBaru)
+        throws JadwalBentrokException {
+
+    Jadwal lama = cariById(id);
+    if (lama == null) return;
+
+    // 1. Cek Konflik, abaikan jadwal yang sedang diedit (lama.getId())
+    if (cekKonflik(jadwalBaru, lama.getId())) { 
+        throw new JadwalBentrokException("Jadwal bentrok setelah diedit");
     }
 
-    public void editJadwal(String id, Jadwal jadwalBaru)
-            throws JadwalBentrokException {
+    // 2. Jika tidak ada konflik, hapus yang lama
+    daftarJadwal.remove(lama);
 
-        Jadwal lama = cariById(id);
-        if (lama == null) return;
+    // 3. Tambahkan yang baru
+    daftarJadwal.add(jadwalBaru);
+}
 
-        daftarJadwal.remove(lama);
-
-        if (cekKonflik(jadwalBaru, null)) {
-            daftarJadwal.add(lama); // rollback manual
-            throw new JadwalBentrokException("Jadwal bentrok setelah diedit");
-        }
-
-        daftarJadwal.add(jadwalBaru);
-    }
 
     public void hapusJadwal(String id) {
         Jadwal j = cariById(id);
@@ -62,6 +66,6 @@ public class JadwalService {
     }
 
     public List<Jadwal> getDaftarJadwal() {
-        return daftarJadwal;
-    }
+    return Collections.unmodifiableList(daftarJadwal);
+}
 }

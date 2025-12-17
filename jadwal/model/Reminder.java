@@ -20,7 +20,10 @@ public class Reminder {
                 jadwal.getJamMulai()
         ).minusMinutes(menitSebelum);
 
-        this.sudahDitampilkan = false;
+        if (waktuReminder.isBefore(LocalDateTime.now())) {
+    waktuReminder = waktuReminder.plusWeeks(1);
+}
+
     }
 
     private LocalDate hitungTanggalBerikutnya(String hari) {
@@ -66,4 +69,6 @@ public class Reminder {
     public void setSudahDitampilkan(boolean status) {
         this.sudahDitampilkan = status;
     }
+
+    
 }

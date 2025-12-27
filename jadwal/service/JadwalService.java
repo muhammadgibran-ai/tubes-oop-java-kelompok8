@@ -85,7 +85,7 @@ public class JadwalService {
         // 3. Tambahkan yang baru
         daftarJadwal.add(jadwalBaru);
     }
-// Di JadwalService.java yang lu kirim:
+// Di JadwalService.java yang dikirim:
 
     public void hapusJadwal(String id) {
         Jadwal j = cariById(id);

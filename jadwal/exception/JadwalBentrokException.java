@@ -1,4 +1,3 @@
-
 package jadwal.exception;
 
 public class JadwalBentrokException extends Exception {
@@ -22,6 +21,3 @@ public class JadwalBentrokException extends Exception {
                 + " Mata Kuliah: " + namaMatkul + " (" + kodeMatkul + ")";
     }
 }
-
-
-

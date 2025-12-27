@@ -317,24 +317,16 @@ public class MainFrame extends JFrame {
             try {
                 jadwalService.tambahJadwal(jadwal);
                 System.out.println("   ✓ Tidak ada konflik waktu");
-} catch (JadwalBentrokException e) {
-    System.out.println("   ✗ Konflik ditemukan");
-
-    Jadwal bentrok = e.getJadwalBentrok();
-
-    String pesan =
-            "Jadwal konflik dengan:\n" +
-            "Mata Kuliah : " + bentrok.getMataKuliah().getNama() + "\n" +
-            "Hari        : " + bentrok.getHari() + "\n" +
-            "Jam         : " + bentrok.getJamMulai() + " - " + bentrok.getJamSelesai();
-
-    formPanel.showMessageDialog(
-            pesan,
-            "Konflik Jadwal",
-            JOptionPane.ERROR_MESSAGE
-    );
-    return;
-}
+            } catch (JadwalBentrokException e) {
+                // TAHAP 4a: KONFLIK ADA
+                System.out.println("   ✗ Konflik ditemukan");
+                formPanel.showMessageDialog(
+                        "Jadwal Konflik!\n" + e.getMessage(),
+                        "Konflik Jadwal",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
 
             // TAHAP 6: BUAT REMINDER
             System.out.println("6. Buat reminder...");
@@ -434,22 +426,14 @@ public class MainFrame extends JFrame {
             // Cek konflik waktu untuk edit
             try {
                 jadwalService.editJadwal(idJadwalLama, jadwalBaru);
-} catch (JadwalBentrokException e) {
-    Jadwal bentrok = e.getJadwalBentrok();
-
-    String pesan =
-            "Jadwal konflik dengan:\n" +
-            "Mata Kuliah : " + bentrok.getMataKuliah().getNama() + "\n" +
-            "Hari        : " + bentrok.getHari() + "\n" +
-            "Jam         : " + bentrok.getJamMulai() + " - " + bentrok.getJamSelesai();
-
-    formPanel.showMessageDialog(
-            pesan,
-            "Konflik Jadwal",
-            JOptionPane.ERROR_MESSAGE
-    );
-    return;
-}
+            } catch (JadwalBentrokException e) {
+                formPanel.showMessageDialog(
+                        "Jadwal Konflik!\n" + e.getMessage(),
+                        "Konflik Jadwal",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
 
             // Update UI
             refreshTable();
